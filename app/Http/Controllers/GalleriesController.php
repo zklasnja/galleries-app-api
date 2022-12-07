@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddImageRequest;
 use App\Http\Requests\CreateGalleryRequest;
 use App\Models\Gallery;
+use App\Models\Image;
 use Illuminate\Support\Facades\Auth;
 
 class GalleriesController extends Controller
@@ -25,13 +27,28 @@ class GalleriesController extends Controller
             ->paginate($perPage);
     }
 
-    public function store(CreateGalleryRequest $request)
+    public function store(CreateGalleryRequest $gallRequest)
     {
-        return Gallery::create([
-            'name' => $request->validated()['name'],
-            'description' => $request->validated()['description'],
+        $gallery = Gallery::create([
+            'name' => $gallRequest->validated()['name'],
+            'description' => $gallRequest->validated()['description'],
             'user_id' => Auth::user()->id,
         ]);
+
+        $gallery->save();
+        $urls = $gallRequest->validated()['urls'];
+
+        foreach ($urls as $url) {
+            // $gallery->images()->create($imageData)
+            $image = new Image();
+            $image->urls = $url;
+            $image->gallery_id = $gallery->id;
+            $image->user_id = Auth::user()->id;
+
+            $image->save();
+        }
+
+        return $gallery->images()->get();
     }
 
     public function show($id)
@@ -51,5 +68,14 @@ class GalleriesController extends Controller
             ->SearchByName($searchTerm)
             ->SearchByDescription($searchTerm)
             ->paginate($perPage);
+    }
+
+    public function destroy($id)
+    {
+        Gallery::destroy($id);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Gallery successfuly deleted',
+        ], 200);
     }
 }

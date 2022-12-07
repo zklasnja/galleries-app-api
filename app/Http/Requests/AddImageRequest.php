@@ -24,8 +24,7 @@ class AddImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'url' => 'required|url|ends_with:png,jpg,jpeg',
-            'gallery_id' => 'required',
+            'gallery_id' => 'numerable',
         ];
     }
 }

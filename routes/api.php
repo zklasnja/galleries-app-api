@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('galleries', [GalleriesController::class, 'index']);
 Route::post('create', [GalleriesController::class, 'store']);
+Route::delete('gallery/{id}', [GalleriesController::class, 'destroy']);
 Route::get('my-galleries', [GalleriesController::class, 'getAuthorGalleries']);
 
 Route::post('add-image', [ImagesController::class, 'store']);
