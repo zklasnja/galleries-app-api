@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GalleriesController;
+use App\Http\Controllers\ImagesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,9 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/galleries', [GalleriesController::class, 'index']);
-Route::get('create', [GalleriesController::class, 'store']);
-Route::get('my-galleries', [GalleriesController::class, 'show']);
+Route::get('galleries', [GalleriesController::class, 'index']);
+Route::post('create', [GalleriesController::class, 'store']);
+Route::get('my-galleries', [GalleriesController::class, 'getAuthorGalleries']);
+
+Route::post('add-image', [ImagesController::class, 'store']);
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
