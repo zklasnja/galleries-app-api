@@ -18,8 +18,8 @@ class ImageFactory extends Factory
     {
         return [
             'urls' => fake()->imageUrl(),
-            'galleries_id' => fake()->numberBetween($min = 2, $max = 2),
-            'user_id' => fake()->numberBetween($min = 2, $max = 2),
+            'gallery_id' => fake()->numberBetween($min = 6, $max = 6),
+            'user_id' => fake()->numberBetween($min = 11, $max = 11),
         ];
     }
 }
