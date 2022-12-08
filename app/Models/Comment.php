@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class Comment extends Model
 {
     use HasFactory;
 
-    protected $table = 'images';
+    protected $table = 'comments';
 
     protected $fillable = [
-        'urls',
+        'body',
         'gallery_id',
         'user_id',
     ];
@@ -22,8 +22,8 @@ class Image extends Model
         return $this->belongsTo(Gallery::class);
     }
 
-    public function users()
+    public function user()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 }

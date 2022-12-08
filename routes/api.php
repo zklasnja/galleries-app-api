@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GalleriesController;
 use App\Http\Controllers\ImagesController;
+use App\Http\Controllers\CommentsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,7 +25,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('galleries', [GalleriesController::class, 'index']);
 Route::post('create', [GalleriesController::class, 'store']);
 Route::delete('gallery/{id}', [GalleriesController::class, 'destroy']);
-Route::get('my-galleries', [GalleriesController::class, 'getAuthorGalleries']);
+Route::get('gallery/{id}', [GalleriesController::class, 'show']);
+Route::get('my-galleries', [GalleriesController::class, 'getMyGalleries']);
+Route::get('authors/{id}', [GalleriesController::class, 'getAuthorsGalleries']);
+
+Route::get('gallery/{id}/comments', [CommentsController::class, 'index']);
+Route::post('gallery/{id}/comments', [CommentsController::class, 'store']);
 
 Route::post('add-image', [ImagesController::class, 'store']);
 

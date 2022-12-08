@@ -12,7 +12,7 @@ class GalleriesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['index']]);
+        $this->middleware('auth:api', ['except' => ['index', 'show']]);
     }
 
     public function index()
@@ -20,8 +20,7 @@ class GalleriesController extends Controller
         $perPage = request('perPage', 10);
         $searchTerm = request('searchTerm', '');
 
-        return Gallery::with('images')
-            ->with('user')
+        return Gallery::with('images', 'user')
             ->SearchByName($searchTerm)
             ->SearchByDescription($searchTerm)
             ->paginate($perPage);
@@ -39,7 +38,6 @@ class GalleriesController extends Controller
         $urls = $gallRequest->validated()['urls'];
 
         foreach ($urls as $url) {
-            // $gallery->images()->create($imageData)
             $image = new Image();
             $image->urls = $url;
             $image->gallery_id = $gallery->id;
@@ -53,18 +51,29 @@ class GalleriesController extends Controller
 
     public function show($id)
     {
-        return Gallery::findOrFail($id);
+        return Gallery::with('images', 'user', 'comments')->findOrFail($id);
     }
 
-    public function getAuthorGalleries()
+    public function getMyGalleries()
     {
         $perPage = request('perPage', 10);
         $searchTerm = request('searchTerm', '');
         $user = Auth::user();
 
-        return Gallery::with('images')
-            ->where('user_id', $user->id)
-            ->with('user')
+        return Gallery::where('user_id', $user->id)
+            ->with('images', 'user')
+            ->SearchByName($searchTerm)
+            ->SearchByDescription($searchTerm)
+            ->paginate($perPage);
+    }
+
+    public function getAuthorsGalleries($id)
+    {
+        $perPage = request('perPage', 10);
+        $searchTerm = request('searchTerm', '');
+
+        return Gallery::where('user_id', $id)
+            ->with('images', 'user')
             ->SearchByName($searchTerm)
             ->SearchByDescription($searchTerm)
             ->paginate($perPage);

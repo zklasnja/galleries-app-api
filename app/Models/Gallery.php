@@ -27,6 +27,11 @@ class Gallery extends Model
         return $this->hasMany(Image::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function scopeSearchByName($query, $term)
     {
         return $query->when($term, function ($query, $term) {
