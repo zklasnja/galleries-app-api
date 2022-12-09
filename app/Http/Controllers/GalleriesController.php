@@ -26,6 +26,32 @@ class GalleriesController extends Controller
             ->paginate($perPage);
     }
 
+    public function getMyGalleries()
+    {
+        $perPage = request('perPage', 10);
+        $searchTerm = request('searchTerm', '');
+        $user = Auth::user();
+
+        return Gallery::with('images', 'user')
+            ->SearchByName($searchTerm)
+            ->SearchByDescription($searchTerm)
+            ->where('user_id', $user->id)
+            ->paginate($perPage);
+    }
+
+    public function getAuthorsGalleries()
+    {
+        $perPage = request('perPage', 10);
+        $searchTerm = request('searchTerm', '');
+        $id = request('id');
+
+        return Gallery::with('images', 'user')
+            ->SearchByName($searchTerm)
+            ->SearchByDescription($searchTerm)
+            ->where('user_id', $id)
+            ->paginate($perPage);
+    }
+
     public function store(CreateGalleryRequest $gallRequest)
     {
         $gallery = Gallery::create([
@@ -52,31 +78,6 @@ class GalleriesController extends Controller
     public function show($id)
     {
         return Gallery::with('images', 'user', 'comments')->findOrFail($id);
-    }
-
-    public function getMyGalleries()
-    {
-        $perPage = request('perPage', 10);
-        $searchTerm = request('searchTerm', '');
-        $user = Auth::user();
-
-        return Gallery::where('user_id', $user->id)
-            ->with('images', 'user')
-            ->SearchByName($searchTerm)
-            ->SearchByDescription($searchTerm)
-            ->paginate($perPage);
-    }
-
-    public function getAuthorsGalleries($id)
-    {
-        $perPage = request('perPage', 10);
-        $searchTerm = request('searchTerm', '');
-
-        return Gallery::where('user_id', $id)
-            ->with('images', 'user')
-            ->SearchByName($searchTerm)
-            ->SearchByDescription($searchTerm)
-            ->paginate($perPage);
     }
 
     public function destroy($id)
