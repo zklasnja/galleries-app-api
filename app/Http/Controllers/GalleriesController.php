@@ -80,6 +80,29 @@ class GalleriesController extends Controller
         return Gallery::with('images', 'user', 'comments')->findOrFail($id);
     }
 
+    public function update($id, CreateGalleryRequest $request)
+    {
+        // $gallery = Gallery::where('id', $id)->update([
+        //     'name' => $request->validated()['name'],
+        //     'description' => $request->validated()['description'],
+        //     'user_id' => Auth::user()->id,
+        // ]);
+
+        // $gallery->save();
+        // $urls = $request->validated()['urls'];
+
+        // foreach ($urls as $url) {
+        //     $image = new Image();
+        //     $image->urls = $url;
+        //     $image->gallery_id = $id;
+        //     $image->user_id = Auth::user()->id;
+
+        //     $image->save();
+        // }
+
+        // return $gallery->images()->get();
+    }
+
     public function destroy($id)
     {
         Gallery::destroy($id);
