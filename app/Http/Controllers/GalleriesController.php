@@ -39,6 +39,8 @@ class GalleriesController extends Controller
         return Gallery::with('images', 'user')
             ->SearchByName($searchTerm)
             ->SearchByDescription($searchTerm)
+            ->orWhereHas('user', function($q){
+                $q->where('first_name', 'LIKE', '%' . request('searchTerm') . '%');})
             ->where('user_id', $user->id)
             ->paginate($perPage);
     }
@@ -52,6 +54,8 @@ class GalleriesController extends Controller
         return Gallery::with('images', 'user')
             ->SearchByName($searchTerm)
             ->SearchByDescription($searchTerm)
+            ->orWhereHas('user', function($q){
+                $q->where('first_name', 'LIKE', '%' . request('searchTerm') . '%');})
             ->where('user_id', $id)
             ->paginate($perPage);
     }
