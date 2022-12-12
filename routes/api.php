@@ -31,6 +31,7 @@ Route::get('authors/{id}', [GalleriesController::class, 'getAuthorsGalleries']);
 
 Route::get('gallery/{id}/comments', [CommentsController::class, 'index']);
 Route::post('gallery/{id}/comments', [CommentsController::class, 'store']);
+Route::delete('gallery/{gId}/comments/{cId}', [CommentsController::class, 'destroy']);
 
 Route::post('add-image', [ImagesController::class, 'store']);
 
@@ -39,4 +40,5 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
+    Route::get('me', 'me');
 });
