@@ -6,7 +6,9 @@ use App\Http\Requests\AddImageRequest;
 use App\Http\Requests\CreateGalleryRequest;
 use App\Models\Gallery;
 use App\Models\Image;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+
 
 class GalleriesController extends Controller
 {
@@ -82,25 +84,24 @@ class GalleriesController extends Controller
 
     public function update($id, CreateGalleryRequest $request)
     {
-        // $gallery = Gallery::where('id', $id)->update([
-        //     'name' => $request->validated()['name'],
-        //     'description' => $request->validated()['description'],
-        //     'user_id' => Auth::user()->id,
-        // ]);
+        $gallery = Gallery::where('id', $id)->update([
+            'name' => $request->validated()['name'],
+            'description' => $request->validated()['description'],
+            'user_id' => Auth::user()->id,
+        ]);
 
-        // $gallery->save();
-        // $urls = $request->validated()['urls'];
+        $urls = $request->validated()['urls'];
+        Image::where('gallery_id', $id)->delete();
 
-        // foreach ($urls as $url) {
-        //     $image = new Image();
-        //     $image->urls = $url;
-        //     $image->gallery_id = $id;
-        //     $image->user_id = Auth::user()->id;
+        foreach ($urls as $url) {
+            Image::create([
+                'urls' => $url,
+                'gallery_id' => $id,
+                'user_id' => Auth::user()->id,
+            ]);
+        }
 
-        //     $image->save();
-        // }
-
-        // return $gallery->images()->get();
+        return Gallery::with('images', 'user', 'comments')->findOrFail($id);
     }
 
     public function destroy($id)
