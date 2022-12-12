@@ -25,6 +25,8 @@ class GalleriesController extends Controller
         return Gallery::with('images', 'user')
             ->SearchByName($searchTerm)
             ->SearchByDescription($searchTerm)
+            ->orWhereHas('user', function($q){
+                $q->where('first_name', 'LIKE', '%' . request('searchTerm') . '%');})
             ->paginate($perPage);
     }
 
