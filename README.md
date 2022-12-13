@@ -33,7 +33,7 @@ cp .env.example .env
 
 Check the correct password for the database in `.env` file.
 
-Run commands in the termina:
+Run commands in the terminal:
 
 ```
 php artisan key:generate
