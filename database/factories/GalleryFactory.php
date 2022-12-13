@@ -19,7 +19,7 @@ class GalleryFactory extends Factory
         return [
             'name' => fake()->word(),
             'description' => fake()->sentence(),
-            'user_id' => fake()->biasedNumberBetween($min = 1, $max = 12),
+            'user_id' => fake()->biasedNumberBetween($min = 1, $max = 10),
         ];
     }
 }
