@@ -22,11 +22,13 @@ class GalleriesController extends Controller
         $perPage = request('perPage', 10);
         $searchTerm = request('searchTerm', '');
 
-        return Gallery::with('images', 'user')
+        return Gallery::latest('created_at')
+            ->with('images', 'user')
             ->SearchByName($searchTerm)
             ->SearchByDescription($searchTerm)
-            ->orWhereHas('user', function($q){
-                $q->where('first_name', 'LIKE', '%' . request('searchTerm') . '%');})
+            ->orWhereHas('user', function ($q) {
+                $q->where('first_name', 'LIKE', '%' . request('searchTerm') . '%');
+            })
             ->paginate($perPage);
     }
 
@@ -36,11 +38,13 @@ class GalleriesController extends Controller
         $searchTerm = request('searchTerm', '');
         $user = Auth::user();
 
-        return Gallery::with('images', 'user')
+        return Gallery::latest('created_at')
+            ->with('images', 'user')
             ->SearchByName($searchTerm)
             ->SearchByDescription($searchTerm)
-            ->orWhereHas('user', function($q){
-                $q->where('first_name', 'LIKE', '%' . request('searchTerm') . '%');})
+            ->orWhereHas('user', function ($q) {
+                $q->where('first_name', 'LIKE', '%' . request('searchTerm') . '%');
+            })
             ->where('user_id', $user->id)
             ->paginate($perPage);
     }
@@ -51,11 +55,13 @@ class GalleriesController extends Controller
         $searchTerm = request('searchTerm', '');
         $id = request('id');
 
-        return Gallery::with('images', 'user')
+        return Gallery::latest('created_at')
+            ->with('images', 'user')
             ->SearchByName($searchTerm)
             ->SearchByDescription($searchTerm)
-            ->orWhereHas('user', function($q){
-                $q->where('first_name', 'LIKE', '%' . request('searchTerm') . '%');})
+            ->orWhereHas('user', function ($q) {
+                $q->where('first_name', 'LIKE', '%' . request('searchTerm') . '%');
+            })
             ->where('user_id', $id)
             ->paginate($perPage);
     }
